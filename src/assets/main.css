@@ -1,0 +1,155 @@
+/* src/assets/main.css */
+/* @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap'); */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Variables ─────────────────────────────────────────── */
+:root {
+  --c-brand: #1D9E75;
+  --c-brand-light: #E1F5EE;
+  --c-brand-dark: #085041;
+  --c-accent: #378ADD;
+  --c-amber: #EF9F27;
+  --c-red: #E24B4A;
+  --sidebar-w: 240px;
+  --topbar-h: 58px;
+  --radius: 10px;
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: #f5f5f3;
+  color: #1a1a1a;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d0d0cc;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b0b0aa;
+}
+
+/* ── Transitions ───────────────────────────────────────────── */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-up-enter-active {
+  transition: all 0.25s ease;
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* ── Utility classes ───────────────────────────────────────── */
+.font-mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+}
+
+.badge-present {
+  background: #E1F5EE;
+  color: #085041;
+}
+
+.badge-late {
+  background: #FAEEDA;
+  color: #633806;
+}
+
+.badge-absent {
+  background: #FCEBEB;
+  color: #791F1F;
+}
+
+.badge-paid {
+  background: #E1F5EE;
+  color: #085041;
+}
+
+.badge-pending {
+  background: #FAEEDA;
+  color: #633806;
+}
+
+.badge-overdue {
+  background: #FCEBEB;
+  color: #791F1F;
+}
+
+.badge-info {
+  background: #E6F1FB;
+  color: #0C447C;
+}
+
+.card {
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+/* ── Live pulse animation ──────────────────────────────────── */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c-brand);
+  animation: pulse 2s infinite;
+  display: inline-block;
+}

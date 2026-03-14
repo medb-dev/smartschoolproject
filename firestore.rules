@@ -1,0 +1,77 @@
+// firestore.rules
+// Déployer avec : firebase deploy --only firestore:rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Fonctions helpers ──────────────────────────────────────
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isAdmin() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    function isParent() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'parent';
+    }
+    function isTeacher() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
+    }
+    function isOwnerParent(studentId) {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/students/$(studentId)).data.parentId == request.auth.uid;
+    }
+
+    // ── Users ──────────────────────────────────────────────────
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // ── Students ───────────────────────────────────────────────
+    match /students/{studentId} {
+      allow read: if isAdmin() || isTeacher() || isOwnerParent(studentId);
+      allow create, update, delete: if isAdmin();
+
+      // Paiements — sous-collection
+      match /payments/{paymentId} {
+        allow read: if isAdmin() || isOwnerParent(studentId);
+        allow write: if isAdmin();
+      }
+    }
+
+    // ── Courses & Sessions & Présences ─────────────────────────
+    match /courses/{courseId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+
+      match /sessions/{sessionId} {
+        allow read: if isAuthenticated();
+        allow write: if isAdmin() || isTeacher();
+
+        match /attendances/{attendanceId} {
+          allow read: if isAuthenticated();
+          // ESP32 écrit via Cloud Function (service account) — pas de règle directe
+          allow create: if isAdmin() || isTeacher();
+          allow update, delete: if isAdmin();
+        }
+      }
+    }
+
+    // ── Badges NFC ─────────────────────────────────────────────
+    match /badges/{badgeUID} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ── Dispositifs ESP32 ──────────────────────────────────────
+    match /devices/{deviceId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}
