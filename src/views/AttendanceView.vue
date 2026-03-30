@@ -90,7 +90,7 @@ import AttendanceLiveList from '@/components/attendance/AttendanceLiveList.vue'
 
 const attendanceStore = useAttendanceStore()
 const activeTab   = ref('today')
-const manualSearch = ref('')
+/*const manualSearch = ref('')*/
 
 const tabs = [
   { key:'today',  label:"Aujourd'hui" },
@@ -114,7 +114,21 @@ function markManual(status) {
   if (!manualSearch.value.trim()) return
   // TODO: connect to real course/session IDs
   // attendanceStore.markAttendance(courseId, sessionId, studentId, status)
-  manualSearch.value = ''
+  attendanceStore.markAttendance(1, 1, manualSearch.value, status)
+
+  const student = attendanceStore.students.find(s => s.id == manualSearch.value)
+  if (student) {
+    student.status = status
+  }
+
+  // TODO: scroll to student
+  const studentEl = document.querySelector(`.student[data-id="${manualSearch.value}"]`)
+  if (studentEl) {
+    studentEl.scrollIntoView({ block:'center', inline:'center', behavior:'smooth' })
+  }
+   
+
+  //manualSearch.value = ''
 }
 
 onMounted(() => {

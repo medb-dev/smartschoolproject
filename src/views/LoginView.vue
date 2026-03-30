@@ -50,7 +50,10 @@
       </form>
 
       <p class="login-hint font-mono">
-        admin@test.ma · parent@test.ma · prof@test.ma
+        admin@soutien.ma | prof@soutien.ma | parent@soutien.ma
+      </p>
+      <p class="login-hint font-mono">
+        Admin123! | Prof123! | Parent123!
       </p>
     </div>
   </div>
@@ -89,7 +92,7 @@ async function handleLogin() {
   border: 0.5px solid rgba(0,0,0,0.1);
   border-radius: 14px;
   padding: 40px;
-  width: 100%; max-width: 400px;
+  width: 100%; max-width: 450px;
 }
 .login-logo {
   display: flex; align-items: center; gap: 12px;
