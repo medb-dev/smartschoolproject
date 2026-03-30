@@ -27,13 +27,13 @@ Il combine une **application web moderne** avec un **système embarqué (ESP32 +
 
 ## 🔌 Schéma de câblage ESP32
 
-<img src="./images/schema.png" alt="ESP32 Wiring Schema" width="300"/>
+![ESP32 Wiring Schema](https://github.com/medb-dev/smartschoolproject/tree/main/images/schema.png)
 
 ---
 
 ## 🧪 Prototype du projet
 
-<img src="./images/project_prototype.jpeg" alt="Project Prototype" width="300"/>
+![Project Prototype](https://github.com/medb-dev/smartschoolproject/tree/main/images/project_prototype.jpeg)
 
 ---
 
