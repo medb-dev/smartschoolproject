@@ -1,192 +1,146 @@
-# SmartSoutien — smartschoolproject
+# SmartSoutien — Smart School Project
 
-Système de gestion intelligente pour école de soutien scolaire (niveau Bac).
-Intégration **Vue.js 3 + Firebase + ESP32 NFC + IA Python**.
+SmartSoutien est un système intelligent de gestion pour école de soutien scolaire.
+Il combine une **application web moderne** avec un **système embarqué (ESP32 + NFC)** pour automatiser la gestion des présences et améliorer le suivi des étudiants, **un module d’intelligence artificielle (Python + FastAPI)** pour automatiser la gestion des présences, analyser les données et améliorer le suivi des étudiants.
 
 ---
 
-## 🚀 Installation en 5 étapes
+## 🧠 Fonctionnalités principales
 
-### Étape 1 — Cloner et installer les dépendances
+* 📶 Scan NFC des étudiants (ESP32)
+* 📊 Suivi des présences en temps réel
+* 👨‍🏫 Gestion des cours et sessions
+* 💰 Gestion des paiements
+* 📡 Synchronisation avec Firebase (Firestore)
+* 📈 Tableau de bord analytique
+
+---
+
+## 🔧 Architecture du projet
+
+* **Frontend** : Vue.js 3 + TailwindCSS
+* **Backend** : Firebase (Firestore, Auth, Hosting)
+* **Embedded System** : ESP32 + module NFC
+* **AI Module (optionnel)** : Python (FastAPI)
+
+---
+
+## 🔌 Schéma de câblage ESP32
+
+![ESP32 Wiring Schema](./schema.png)
+
+---
+
+## 🧪 Prototype du projet
+
+![Project Prototype](./project_prototype.jpeg)
+
+---
+
+## 🚀 Installation (résumé)
 
 ```bash
-# Cloner le projet
-git clone https://github.com/votre-org/smartschoolproject.git
+git clone https://github.com/<your-repo>/smartschoolproject.git
 cd smartschoolproject
-
-# Installer les dépendances
 npm install
-```
-
-### Étape 2 — Créer le projet Firebase
-
-1. Aller sur [https://console.firebase.google.com](https://console.firebase.google.com)
-2. Cliquer **"Add project"** → Nom : `smartschoolproject`
-3. Activer les services suivants :
-   - **Firestore Database** → Mode Test (pour commencer)
-   - **Authentication** → Email/Password
-   - **Storage**
-   - **Hosting**
-4. **Project Settings** → **"Add app"** → Web (icône `</>`)
-5. Copier la config Firebase
-
-### Étape 3 — Configurer Firebase dans le projet
-
-Ouvrir `src/firebase/config.js` et remplacer les valeurs :
-
-```javascript
-const firebaseConfig = {
-  apiKey:            "VOTRE_API_KEY",        // ← coller ici
-  authDomain:        "smartschoolproject.firebaseapp.com",
-  projectId:         "smartschoolproject",
-  storageBucket:     "smartschoolproject.appspot.com",
-  messagingSenderId: "VOTRE_SENDER_ID",      // ← coller ici
-  appId:             "VOTRE_APP_ID"          // ← coller ici
-}
-```
-
-### Étape 4 — Créer les premiers utilisateurs Firebase
-
-Dans Firebase Console → **Authentication** → **Add user** :
-
-| Email               | Mot de passe | Rôle    |
-|---------------------|-------------|---------|
-| admin@soutien.ma    | Admin123!   | admin   |
-| prof@soutien.ma     | Prof123!    | teacher |
-| parent@soutien.ma   | Parent123!  | parent  |
-
-Ensuite dans **Firestore** → créer la collection `users` :
-
-```
-users/
-  {uid_admin}/
-    name: "Mohammed Alami"
-    email: "admin@soutien.ma"
-    role: "admin"
-  
-  {uid_prof}/
-    name: "Prof. Benali"
-    email: "prof@soutien.ma"
-    role: "teacher"
-  
-  {uid_parent}/
-    name: "Hassan Benali"
-    email: "parent@soutien.ma"
-    role: "parent"
-```
-
-### Étape 5 — Lancer le projet
-
-```bash
 npm run dev
-# → http://localhost:3000
 ```
 
 ---
 
-## 📁 Structure du projet
+## ⚙️ Configuration Firebase
+
+1. Créer un projet sur Firebase
+2. Activer :
+
+   * Firestore Database
+   * Authentication
+3. Ajouter votre configuration dans :
+
+```js
+src/firebase/config.js
+```
+
+⚠️ **Important :**
+Ne jamais publier vos clés API ou tokens dans un dépôt public.
+
+---
+
+## 📁 Structure simplifiée
 
 ```
-smartschoolproject/
-├── src/
-│   ├── firebase/
-│   │   ├── config.js          ← Configuration Firebase (à compléter)
-│   │   └── collections.js     ← Références Firestore centralisées
-│   │
-│   ├── stores/                ← Pinia stores (état global)
-│   │   ├── authStore.js       ← Authentification + rôles
-│   │   ├── studentStore.js    ← CRUD étudiants + paiements
-│   │   ├── attendanceStore.js ← Présences temps réel
-│   │   └── deviceStore.js     ← Monitoring ESP32
-│   │
-│   ├── views/                 ← Pages principales
-│   │   ├── AppLayout.vue      ← Sidebar + Topbar
-│   │   ├── LoginView.vue      ← Connexion
-│   │   ├── DashboardView.vue  ← Vue d'ensemble
-│   │   ├── AttendanceView.vue ← Présences NFC
-│   │   ├── StudentsView.vue   ← Liste étudiants
-│   │   ├── PaymentsView.vue   ← Paiements + Factures
-│   │   ├── DevicesView.vue    ← ESP32 monitoring
-│   │   ├── AnalyticsView.vue  ← IA + Rapports
-│   │   └── ParentPortalView.vue ← Espace parent
-│   │
-│   ├── components/
-│   │   ├── dashboard/
-│   │   │   ├── StatCard.vue
-│   │   │   ├── PresenceWeekChart.vue
-│   │   │   └── RevenueSparkline.vue
-│   │   └── attendance/
-│   │       └── AttendanceLiveList.vue
-│   │
-│   ├── router/index.js        ← Routes + Auth Guards
-│   ├── composables/
-│   │   └── useFirestore.js    ← Composables réactifs Firestore
-│   ├── locales/
-│   │   ├── fr.js              ← Français
-│   │   └── ar.js              ← Arabe
-│   ├── assets/main.css        ← Styles globaux + Tailwind
-│   ├── App.vue
-│   └── main.js
-│
-├── firestore.rules             ← Règles de sécurité Firestore
-├── tailwind.config.js
-├── vite.config.js
-└── package.json
+src/
+├── firebase/        # Configuration Firebase
+├── stores/          # Gestion d'état (Pinia)
+├── views/           # Pages principales
+├── components/      # Composants UI
+├── router/          # Navigation
 ```
 
 ---
 
-## 🔌 Intégration ESP32
+## 🔌 ESP32 & NFC
 
-Le firmware ESP32 (dossier `embedded/`) envoie les scans NFC directement à Firestore via HTTPS.
+Le module ESP32 :
 
-**Collection cible :** `badges/{UID}` → vérifie l'étudiant → enregistre dans `attendances/`
+* lit les badges NFC
+* vérifie l'utilisateur
+* envoie les données à Firestore
 
-Voir le code complet dans `embedded/src/main.cpp`
+👉 Exemple de flux :
+
+```
+Scan NFC → Vérification → Enregistrement présence → Cloud
+```
 
 ---
 
-## 🤖 Module IA (Python)
+## 💰 Paiements (Firestore)
 
-Le module analytique (`ml/`) expose une API FastAPI :
+Collection recommandée :
+
+```
+payments/
+  └── autoId
+       ├── studentId
+       ├── courseId
+       ├── amount
+       ├── status
+       └── timestamp
+```
+
+---
+
+## 🛡️ Sécurité
+
+* Ne pas exposer :
+
+  * clés API
+  * tokens Firebase
+  * identifiants utilisateurs
+* Utiliser des règles Firestore sécurisées en production
+
+---
+
+## 🚢 Déploiement
 
 ```bash
-cd ml
-pip install -r requirements.txt
-uvicorn main:app --reload
-# → http://localhost:8000/predict
-```
-
----
-
-## 🚢 Déploiement Firebase Hosting
-
-```bash
-npm install -g firebase-tools
-firebase login
-firebase init hosting
 npm run build
 firebase deploy
-# → https://smartschoolproject.web.app
 ```
 
 ---
 
-## 🛠 Scripts disponibles
+## 📌 Remarques
 
-```bash
-npm run dev      # Serveur de développement (port 3000)
-npm run build    # Build de production
-npm run preview  # Prévisualiser le build
-npm run lint     # Linter ESLint
-```
+Ce projet est conçu à des fins éducatives et peut être étendu avec :
+
+* contrôle d’accès intelligent
+* blocage si paiement non effectué
+* dashboard avancé
 
 ---
 
-## 👥 Équipe
+## 👨‍💻 Auteurs
 
-| Membre | Filière | Module |
-|--------|---------|--------|
-| Étudiant 1 | Ingénierie Logicielle | Vue.js + Firebase |
-| Étudiant 2 | Systèmes Embarqués | ESP32 + NFC |
-| Étudiant 3 | Data & IA | Python + ML |
+Projet réalisé dans le cadre de Projet (SmartSoutien — Smart School Project) - Master 1er annee (IISE-IDIA-IL) - un système intelligent embarqué et web.
