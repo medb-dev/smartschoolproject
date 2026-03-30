@@ -27,13 +27,13 @@ Il combine une **application web moderne** avec un **système embarqué (ESP32 +
 
 ## 🔌 Schéma de câblage ESP32
 
-![ESP32 Wiring Schema](./schema.png)
+<img src="./images/schema.png" alt="ESP32 Wiring Schema" width="300"/>
 
 ---
 
 ## 🧪 Prototype du projet
 
-![Project Prototype](./project_prototype.jpeg)
+<img src="./images/project_prototype.jpeg" alt="Project Prototype" width="300"/>
 
 ---
 
