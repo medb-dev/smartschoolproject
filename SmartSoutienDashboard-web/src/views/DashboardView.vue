@@ -24,7 +24,7 @@
         <AttendanceLiveList
           :items="attendanceStore.todayAttendances.length
             ? attendanceStore.todayAttendances
-            : mockItems"
+            : items"
         />
       </div>
 
@@ -54,6 +54,10 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+
+import { collection, getDocs, query, orderBy } from "firebase/firestore"
+import { db } from "@/firebase/config"
+
 import { useAttendanceStore } from '@/stores/attendanceStore'
 import { useStudentStore }    from '@/stores/studentStore'
 import { useDeviceStore }     from '@/stores/deviceStore'
@@ -70,16 +74,47 @@ const weekData    = ref([82, 88, 75, 91, 87, 93, 80])
 const revenueData = ref([28, 32, 35, 30, 38, 41, 42])
 
 // Mock fallback items
-const mockItems = ref([
+/*const mockItems = ref([
   { id:1, initials:'YB', name:'Yassine Benali',  course:'Mathématiques',  time:'14:02', status:'present', color:'green' },
   { id:2, initials:'SW', name:'Sara Wahbi',       course:'Physique-Chimie',time:'14:05', status:'present', color:'blue'  },
   { id:3, initials:'KO', name:'Karim Ouali',      course:'SVT',            time:'14:08', status:'late',    color:'amber' },
   { id:4, initials:'NE', name:'Nadia El Fassi',   course:'Mathématiques',  time:'14:11', status:'present', color:'green' },
-])
+])*/
 
+// let unsubStudents, unsubDevices, unsubAttendance
 let unsubStudents, unsubDevices, unsubAttendance
 
-onMounted(() => {
+const items = ref([])
+
+onMounted(async () => {
+  const q = query(
+    collection(
+      db,
+      "courses",
+      "cours_math_A",
+      "sessions",
+      "session_001",
+      "attendances"
+    ),
+    orderBy("scannedAt", "desc")
+  )
+
+  const snapshot = await getDocs(q)
+
+  items.value = snapshot.docs.map(doc => {
+    const data = doc.data()
+
+    return {
+      id: doc.id,
+      initials: getInitials(data.studentName),
+      name: data.studentName,
+      course: data.courseId || "N/A",
+      time: new Date(parseInt(data.scannedAt)).toLocaleTimeString('en-US', { timeZone: 'Africa/Casablanca' }),
+      //time: formatTime(data.scannedAt),
+      status: data.status,
+      color: getStatusColor(data.status)
+    }
+  })
   // Start all real-time listeners
   unsubStudents    = studentStore.listenStudents()
   unsubDevices     = deviceStore.listenDevices()
@@ -87,10 +122,33 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  // Stop all real-time listeners
   studentStore.stopListening()
   deviceStore.stopListening()
   attendanceStore.stopListening()
 })
+
+function getInitials(name) {
+  return name
+    .split(" ")
+    .map(n => n[0])
+    .join("")
+    .toUpperCase()
+}
+
+function formatTime(timestamp) {
+  return new Date(parseInt(timestamp)).toLocaleTimeString()
+}
+
+function getStatusColor(status) {
+  switch (status) {
+    case "present": return "green"
+    case "late": return "amber"
+    case "absent": return "red"
+    default: return "gray"
+  }
+}
+
 </script>
 
 <style scoped>

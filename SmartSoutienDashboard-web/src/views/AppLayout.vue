@@ -6,9 +6,10 @@
       <div class="sidebar-logo">
         <div class="logo-mark">
           <div class="logo-icon">
-            <svg viewBox="0 0 20 20" fill="white" width="18" height="18">
+            <!-- <svg viewBox="0 0 20 20" fill="white" width="18" height="18">
               <path d="M10 2L3 7v11h5v-5h4v5h5V7z" />
-            </svg>
+            </svg> -->
+            <img src="../assets/logo-icon.png" alt="" srcset="" width="33.99" height="33.99">
           </div>
           <div>
             <div class="logo-name">SmartSoutien</div>
@@ -247,7 +248,7 @@ async function logout() {
 .logo-icon {
   width: 34px;
   height: 34px;
-  background: var(--c-brand);
+  /* background: var(--c-brand); */
   border-radius: 8px;
   display: flex;
   align-items: center;

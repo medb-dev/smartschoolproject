@@ -4,9 +4,10 @@
     <div class="login-card">
       <div class="login-logo">
         <div class="logo-icon">
-          <svg viewBox="0 0 20 20" fill="white" width="24" height="24">
+          <!-- <svg viewBox="0 0 20 20" fill="white" width="24" height="24">
             <path d="M10 2L3 7v11h5v-5h4v5h5V7z"/>
-          </svg>
+          </svg> -->
+          <img src="../assets/logo-icon.png" alt="" srcset="" width="47.99" height="47.99">
         </div>
         <div>
           <div class="brand-name">SmartSoutien</div>
@@ -100,7 +101,7 @@ async function handleLogin() {
 }
 .logo-icon {
   width: 48px; height: 48px; border-radius: 12px;
-  background: var(--c-brand);
+  /* background: var(--c-brand); */
   display: flex; align-items: center; justify-content: center;
 }
 .brand-name { font-size: 18px; font-weight: 600; color: var(--c-brand-dark); }

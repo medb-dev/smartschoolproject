@@ -4,13 +4,14 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [vue()],
+  base: "./smartschoolproject",
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src')
-    }
+      "@": resolve(__dirname, "src"),
+    },
   },
   server: {
     port: 3000,
-    open: true
-  }
-})
+    open: true,
+  },
+});
