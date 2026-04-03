@@ -82,8 +82,8 @@
         <div class="topbar-title">{{ currentTitle }}</div>
         <div class="topbar-right">
           <div class="live-indicator">
-            <span class="live-dot"></span>
             <span class="live-label font-mono"></span>
+            <span class="live-dot"></span>
           </div>
           <div class="topbar-date font-mono">{{ formattedDate }}</div>
         </div>
@@ -101,7 +101,7 @@
 </template>
 
 <script setup>
-import { computed, h } from "vue";
+import { ref, computed, onMounted, onUnmounted, h } from "vue"
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import { useDeviceStore } from "@/stores/deviceStore";
@@ -198,9 +198,26 @@ const router = useRouter();
 const currentTitle = computed(() => route.meta.title || "SmartSoutien");
 const offlineDevices = computed(() => deviceStore.offlineDevices.length);
 const pendingScans = computed(() => 3); // from attendanceStore in real impl
+
+const now = ref(new Date())
+
+let interval
+
+onMounted(() => {
+  interval = setInterval(() => {
+    now.value = new Date() // 🔥 triggers reactivity
+  }, 1000)
+})
+
+onUnmounted(() => {
+  clearInterval(interval)
+})
+
 const formattedDate = computed(() =>
-  format(new Date(), "EEE dd MMM yyyy", { locale: fr })
-);
+  format(now.value, "HH:mm:ss EEEE dd MMMM yyyy ", { locale: fr })
+)
+
+
 const roleLabel = computed(() => {
   const map = {
     admin: "Administrateur",
